@@ -4,14 +4,14 @@ const db = require('../config/db');
 const bookSchema = new mongoose.Schema({
     title:{
         type:String,
-        default:"____",
+        default:"",
     },
     isbn:{
         type:Number,
     },
     author:{
         type:String,
-        default:"____"
+        default:""
     }
 });
 
