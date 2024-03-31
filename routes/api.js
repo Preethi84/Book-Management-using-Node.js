@@ -30,7 +30,24 @@ router.post('/books', async function(req,res){
 })
 
 router.put('/books/:id', async function(req,res){
+    const {id} = req.params;
+    const booksExist = await bookmodel.findOne({isbn:id});
+    const {
+        title,
+        author
+    } = req.body;
+    if (!booksExist) return res.send('Book doesnt exist');
 
+    const updateField = (val, prev) => !val ? prev : val;
+    const updateBook = {
+        ...booksExist,
+        title: updateField(title, booksExist.title),
+        author: updateField(author, booksExist.author)
+    };
+
+    await bookmodel.updateOne({isbn:id}, {$set : {title:updateBook.title, author:updateBook.author}}).then(function(){
+        res.send(`book with id ${id} updated successfully`);
+    }) 
 })
 
 router.delete('/books/:id', async function(req, res){
